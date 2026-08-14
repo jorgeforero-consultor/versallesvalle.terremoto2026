@@ -1,21 +1,177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versalles | Terremoto 2026</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Versalles | Terremoto 2026</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #d9dee5;
+      padding: 28px 40px;
+    }
+
+    header h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #6b7280;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .titulo-seccion {
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    }
+
+    .card span {
+      display: block;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .card strong {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 24px;
+    }
+
+    .panel h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .panel p {
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    footer {
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      padding: 25px;
+    }
+
+    @media (max-width: 850px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 22px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <h1>Versalles | Terremoto 2026</h1>
+<header>
+  <h1>Versalles | Terremoto 2026</h1>
+  <p>Dashboard de seguimiento a la emergencia</p>
+</header>
 
-    <h2>Dashboard de seguimiento a la emergencia</h2>
+<main>
 
+  <div class="titulo-seccion">
+    <h2>Situación general</h2>
+  </div>
+
+  <section class="cards">
+
+    <div class="card">
+      <span>Personas afectadas</span>
+      <strong>0</strong>
+    </div>
+
+    <div class="card">
+      <span>Viviendas afectadas</span>
+      <strong>0</strong>
+    </div>
+
+    <div class="card">
+      <span>Veredas afectadas</span>
+      <strong>0</strong>
+    </div>
+
+    <div class="card">
+      <span>Infraestructura afectada</span>
+      <strong>0</strong>
+    </div>
+
+  </section>
+
+  <section class="panel">
+    <h2>Seguimiento de la emergencia</h2>
     <p>
-        Información consolidada sobre afectaciones, necesidades
-        y respuesta institucional.
+      Este dashboard consolida información sobre afectaciones,
+      necesidades humanitarias, daños en infraestructura
+      y acciones de respuesta desarrolladas en el municipio de Versalles.
     </p>
+  </section>
+
+  <section class="panel">
+    <h2>Próximamente</h2>
+    <p>
+      En este espacio se incorporarán gráficos, distribución territorial,
+      necesidades prioritarias, mapas y evolución de la emergencia.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  Versalles, Valle del Cauca · Seguimiento terremoto 2026
+</footer>
 
 </body>
 </html>
