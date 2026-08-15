@@ -144,9 +144,7 @@
   table.vtable tr:nth-child(even) td{background:#F7F9FB;}
   table.vtable tfoot td{font-weight:700; background:#EAF0F7; color:var(--navy); border-top:2px solid var(--navy);}
   .empty-row td{text-align:center; color:var(--muted-2); padding:18px; font-style:italic;}
-
-
-  /* ===== FOOTER ===== */
+/* ===== FOOTER ===== */
   .source-line{text-align:center; font-size:11.5px; color:var(--muted-2); padding:6px 0 4px;}
   .traceability-line{text-align:center; font-size:11px; color:var(--muted-2); padding:0 0 16px; font-style:italic;}
   .footer{background:var(--navy); color:#fff; padding:22px 5vw;}
@@ -209,7 +207,7 @@
         <div class="brand">
           <div class="l1">REPÚBLICA DE COLOMBIA · VALLE DEL CAUCA</div>
           <div class="l2">ALCALDÍA MUNICIPAL DE VERSALLES</div>
-          <div class="l3">Coordinación Municipal de Gestión del Riesgo de Desastres · Información oficial para el seguimiento de la emergencia</div>
+          <div class="l3">Coordinación Municipal de Gestión del Riesgo de Desastres</div>
         </div>
       </div>
       <div class="header-actions">
@@ -219,9 +217,9 @@
       </div>
     </div>
     <div class="header-title">
-      <div class="eyebrow">PANEL DE SITUACIÓN · INFORMACIÓN ACUMULADA</div>
-      <h1>Emergencia sísmica en Versalles · Terremoto 2026</h1>
-      <div class="header-sub">Tablero institucional para consultar de manera clara y consolidada las afectaciones sobre personas, instituciones, vías, servicios esenciales, vivienda, actividad económica y zona rural del municipio de Versalles, Valle del Cauca. Sismo del 10 de agosto de 2026 · Magnitud 7,4 · Epicentro: San José del Palmar, Chocó.</div>
+      <div class="eyebrow">SITUACIÓN ACUMULADA</div>
+      <h1>Emergencia sísmica en Versalles</h1>
+      <div class="header-sub">Sismo del 10 de agosto de 2026 · Magnitud 7,4 · Epicentro: San José del Palmar, Chocó. Panel de seguimiento para uso de las Secretarías municipales y la Gobernación del Valle del Cauca. Los datos están organizados por prioridad: primero las personas, luego las instituciones críticas, después las vías y los servicios, y por último el detalle de vivienda, economía y zona rural.</div>
     </div>
     <div class="cutoff-row">
       <div class="cutoff-badge"><span id="cutoff-text"></span></div>
@@ -308,9 +306,7 @@
       <div class="hint" style="margin-top:10px;">«—» en familias significa que ese dato aún no se ha verificado en esa localidad — <b>no significa cero</b>. Las localidades marcadas <span class="flag">VERIFICAR</span> tienen un nombre parecido al de otra localidad ya registrada; se muestran por separado hasta confirmar en terreno si son el mismo lugar o dos lugares distintos, para evitar tanto un doble conteo como una omisión.</div>
     </div>
   </div>
-
-
-  <div class="source-line" id="source-line"></div>
+<div class="source-line" id="source-line"></div>
   <div class="traceability-line" id="traceability-line"></div>
 </div>
 
@@ -378,7 +374,7 @@
         </div>
         <div class="field" style="margin-bottom:0;">
           <label for="f-fuente">Fuente / trazabilidad</label>
-          <input type="text" id="f-fuente" placeholder='Ej: Hoja "Trazabilidad EDAN", documento 11 (v5)'>
+          <input type="text" id="f-fuente" placeholder='Ej: Hoja "Trazabilidad EDAN", documento 11 (v8)'>
         </div>
       </div>
 
@@ -456,9 +452,7 @@
           <div class="hint">Deja el campo de familias vacío si aún no se conoce (se mostrará como «—»). El quinto campo "verificar" es opcional: escribe "si" para marcar la localidad con la etiqueta VERIFICAR (nombre parecido a otra ya registrada). Ejemplo: El Vergel (vereda/caserío); 1; 1; 1; si</div>
         </div>
       </div>
-
-
-      <div class="modal-actions">
+<div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="btn-cancel">Cancelar</button>
         <button type="submit" class="btn btn-navy" id="btn-save">Guardar cambios</button>
       </div>
@@ -496,7 +490,7 @@ const ICON = {
 };
 
 const TONE_COLOR = { ok:'#1E7145', warn:'#B7791F', bad:'#C1272D' };
-const STORAGE_KEY = 'versalles-sismo-dashboard-v2';
+const STORAGE_KEY = 'versalles-sismo-dashboard-v3'; // v3: corte 14 ago 2026 — clave nueva para no cargar datos guardados de cortes anteriores (13 ago y previos, esquema v2)
 const AUTH_KEY = 'versalles-sismo-dashboard-auth';
 const MAX_ATTEMPTS = 5;
 const LOCK_MINUTES = 15;
@@ -563,32 +557,33 @@ async function saveAuth(auth){
 }
 
 /* ============ DATOS ============
-   Consolidados desde la hoja "Trazabilidad EDAN" del documento 11 (v5), que ya reconcilia
-   en UN SOLO sistema todos los informes (1 a 5) y reportes de campo (12 y 13 de agosto).
+   Consolidados desde la hoja "Trazabilidad EDAN" del documento 11 (v8), que ya reconcilia
+   en UN SOLO sistema todos los informes (1 a 5) y reportes de campo (12, 13 y 14 de agosto).
    No existen aquí conteos paralelos "damnificados" vs. "afectados": cada categoría tiene
    una única cifra municipal, con su desagregación urbano/rural. */
 const DEFAULT_DATA = {
-  cutoffLabel: "13 de agosto de 2026 · 6:00 p.m.",
+  cutoffLabel: "14 de agosto de 2026 · 6:00 p.m.",
   updatedAt: new Date().toISOString(),
   updatedBy: "Coordinación de Gestión del Riesgo",
-  fuente: 'Hoja "Trazabilidad EDAN", documento 11 (v5) — Informes Técnicos No. 1 a 5 + reportes de campo del 12 y 13 de agosto de 2026',
+  fuente: 'Hoja "Trazabilidad EDAN", documento 11 (v8) — Informes Técnicos No. 1 a 5 + reportes de campo del 12, 13 y 14 de agosto de 2026',
 
-  personas: { afectadas: 1741, fallecidos: 0, lesionados: 18, familias: 832 },
-  urbano: { personas: 1350, familias: 718, viviendas: 582 },
-  rural: { personas: 391, familias: 114, viviendas: 167, veredasVerificadas: 33 },
+  personas: { afectadas: 2267, fallecidos: 0, lesionados: 18, familias: 1050 },
+  urbano: { personas: 1454, familias: 771, viviendas: 635 },
+  rural: { personas: 813, familias: 279, viviendas: 334, veredasVerificadas: 40 },
 
   instituciones: [
     { nombre:"Sede de la Alcaldía Municipal", tipo:"Administración municipal", estado:"INHABITABLE", tone:"bad" },
     { nombre:"Garaje municipal", tipo:"Infraestructura municipal", estado:"INHABITABLE", tone:"bad" },
     { nombre:"Hospital Henry Valencia Orozco", tipo:"Salud", estado:"AFECTACIÓN ESTRUCTURAL", tone:"bad", nota:"Continúa operando; atendió a las 18 personas lesionadas" },
-    { nombre:"IE La Inmaculada", tipo:"Educación (1 de 4 sedes afectadas)", estado:"PENDIENTE EVALUACIÓN ESTRUCTURAL", tone:"warn" },
-    { nombre:"IE Carlos Holguín", tipo:"Educación (1 de 4 sedes afectadas)", estado:"PENDIENTE EVALUACIÓN ESTRUCTURAL", tone:"warn" },
+    { nombre:"IE La Inmaculada", tipo:"Educación (1 de 5 sedes afectadas)", estado:"PENDIENTE EVALUACIÓN ESTRUCTURAL", tone:"warn" },
+    { nombre:"IE Carlos Holguín", tipo:"Educación (1 de 5 sedes afectadas)", estado:"PENDIENTE EVALUACIÓN ESTRUCTURAL", tone:"warn" },
     { nombre:"Iglesia La Inmaculada", tipo:"Templo (1 de 2 afectados)", estado:"AFECTADA", tone:"warn" },
     { nombre:"Estación de Policía", tipo:"Seguridad", estado:"AFECTADA", tone:"warn" },
     { nombre:"Casa Campesina", tipo:"Institución comunitaria", estado:"AFECTADA", tone:"warn" },
     { nombre:"Asilo Santa Inés", tipo:"Institución comunitaria", estado:"AFECTADA", tone:"warn" },
+    { nombre:"Escuela vereda El Tulcán", tipo:"Educación (zona rural — dato nuevo, 14 ago)", estado:"AFECTADA", tone:"warn", nota:"Único dato reportado en esta vereda al 14 de agosto: la escuela. Aún no se conoce el estado de vivienda ni de familias en El Tulcán." },
   ],
-  institucionesFootnote: "El municipio reporta 4 sedes educativas y 2 templos afectados en total; por ahora solo se han identificado por nombre 2 sedes educativas (IE La Inmaculada e IE Carlos Holguín) y 1 templo (Iglesia La Inmaculada) — las demás siguen pendientes de identificación en el levantamiento de campo.",
+  institucionesFootnote: "El municipio reporta 5 sedes educativas y 2 templos afectados en total (antes 4 sedes educativas, hasta el reporte del 14 de agosto); por ahora se han identificado por nombre 3 sedes educativas (IE La Inmaculada, IE Carlos Holguín y la escuela de la vereda El Tulcán) y 1 templo (Iglesia La Inmaculada) — las demás siguen pendientes de identificación en el levantamiento de campo.",
 
   servicios: [
     { label:"Energía eléctrica", status:"SIN SUMINISTRO", tone:"bad" },
@@ -597,74 +592,74 @@ const DEFAULT_DATA = {
     { label:"Acceso vial principal (Sabanazo y Q. Grande)", status:"PASO RESTRINGIDO POR DESLIZAMIENTOS", tone:"warn" },
   ],
 
-  viviendas: { destruidas: 352, averiadas: 397 },
+  viviendas: { destruidas: 452, averiadas: 517 },
   /* Desagregación por estado individual (destruida/no habitable/habitable/averiada), solo para las
      viviendas cuyo informe o reporte de origen ya distinguía ese detalle. Ver documento 11 (v6),
      hoja "Detalle Vivienda por Estado", para el desglose completo por fuente. */
   viviendasDetalle: {
     // Los totales de cada grupo NO se guardan aquí: se toman siempre de
-    // data.viviendas.destruidas (352) y data.viviendas.averiadas (397), y el
+    // data.viviendas.destruidas (452) y data.viviendas.averiadas (517), y el
     // residuo "Sin desagregar" se calcula en render() como total-conocido.
-    destruidas: 58, noHabitables: 198, habitables: 21, averiadas: 5,
+    // Con el Único Reporte del 14 de agosto, el municipio pasó a tener el estado
+    // puntual de vivienda (destruida/no habitable/habitable/averiada) en casi la
+    // totalidad de los casos — el residuo "Sin desagregar" no creció en términos
+    // absolutos (96 y 371) porque el nuevo reporte no aportó casos sin desagregar.
+    destruidas: 124, noHabitables: 232, habitables: 67, averiadas: 79,
   },
 
   otros: {
-    localesTotal: 37, localesDestruidos: 20, localesHabitables: 17,
-    comerciantes: 31, vehiculos: 1, vehiculosDetalle: "1 motocicleta",
+    // Con el Único Reporte del 14 de agosto se conoce el total de locales afectados
+    // (13 nuevos: 8 urbanos + 5 rurales) pero no su estado puntual — por eso
+    // localesDestruidos + localesHabitables (37) ya no suman el total (50); la
+    // diferencia (13) se muestra en el panel como "sin desagregar", igual criterio
+    // que en vivienda.
+    localesTotal: 50, localesDestruidos: 20, localesHabitables: 17,
+    comerciantes: 53, vehiculos: 1, vehiculosDetalle: "1 motocicleta",
   },
 
   veredas: [
-    {nombre:"Batambal", familias:2, personas:7, viviendas:2},
-    {nombre:"Bosquetarzo", familias:8, personas:26, viviendas:10},
-    {nombre:"Calamar", familias:2, personas:12, viviendas:5},
-    {nombre:"Campoalegre", familias:10, personas:20, viviendas:10},
-    {nombre:"Coconuco", familias:null, personas:14, viviendas:5},
+    {nombre:"Batambal", familias:3, personas:8, viviendas:3},
+    {nombre:"Bosquetarzo", familias:10, personas:31, viviendas:12},
+    {nombre:"Buena Vista", familias:1, personas:2, viviendas:1},
+    {nombre:"Calamar", familias:3, personas:13, viviendas:6},
+    {nombre:"Campoalegre", familias:13, personas:23, viviendas:13},
+    {nombre:"Coconuco", familias:4, personas:27, viviendas:9},
     {nombre:"Corregimiento del Balsal", familias:21, personas:48, viviendas:21},
     {nombre:"Corregimiento del Vergel", familias:13, personas:18, viviendas:13},
-    {nombre:"Costa Rica", familias:10, personas:25, viviendas:10},
-    {nombre:"El Balsal (vereda/caserío)", familias:1, personas:4, viviendas:1, verificar:true},
+    {nombre:"Costa Rica", familias:12, personas:34, viviendas:12},
+    {nombre:"El Balsal (vereda/caserío)", familias:10, personas:23, viviendas:10, verificar:true},
+    {nombre:"El Bosque", familias:1, personas:2, viviendas:1},
     {nombre:"El Cedral", familias:null, personas:1, viviendas:1},
     {nombre:"El Cedro", familias:null, personas:3, viviendas:1},
     {nombre:"El Descanso", familias:1, personas:5, viviendas:1},
-    {nombre:"El Diamante", familias:1, personas:3, viviendas:2},
-    {nombre:"El Jordán", familias:12, personas:36, viviendas:12},
-    {nombre:"El Lular", familias:null, personas:4, viviendas:1},
-    {nombre:"El Tambo", familias:8, personas:26, viviendas:8},
-    {nombre:"El Vergel (vereda/caserío)", familias:1, personas:1, viviendas:1, verificar:true},
+    {nombre:"El Diamante", familias:5, personas:12, viviendas:6},
+    {nombre:"El Jordán", familias:23, personas:78, viviendas:23},
+    {nombre:"El Lular", familias:1, personas:5, viviendas:2},
+    {nombre:"El Silencio", familias:13, personas:23, viviendas:13},
+    {nombre:"El Tambo", familias:11, personas:30, viviendas:11},
+    {nombre:"El Tulcán", familias:0, personas:0, viviendas:0},
+    {nombre:"El Vergel (vereda/caserío)", familias:3, personas:6, viviendas:3, verificar:true},
     {nombre:"Guaimalito", familias:1, personas:3, viviendas:2, verificar:true},
     {nombre:"Guayabal", familias:2, personas:4, viviendas:3},
     {nombre:"La Bodega", familias:null, personas:4, viviendas:1},
     {nombre:"La Cascada", familias:null, personas:2, viviendas:1},
-    {nombre:"La Florida", familias:null, personas:70, viviendas:32},
+    {nombre:"La Florida", familias:45, personas:170, viviendas:77},
     {nombre:"La Guaira", familias:null, personas:3, viviendas:1},
-    {nombre:"La Rayada", familias:2, personas:2, viviendas:2},
-    {nombre:"La Sonora", familias:null, personas:3, viviendas:1},
-    {nombre:"Pueblo Hondo", familias:7, personas:16, viviendas:7},
-    {nombre:"Puente Tierra", familias:2, personas:5, viviendas:2},
+    {nombre:"La Rayada", familias:4, personas:6, viviendas:4},
+    {nombre:"La Sonora", familias:2, personas:10, viviendas:3},
+    {nombre:"Murrapal", familias:28, personas:84, viviendas:28},
+    {nombre:"Pinares", familias:3, personas:5, viviendas:3},
+    {nombre:"Pueblo Hondo", familias:9, personas:20, viviendas:9},
+    {nombre:"Puente Tierra", familias:15, personas:44, viviendas:17},
+    {nombre:"Puerto Nuevo", familias:1, personas:3, viviendas:1},
     {nombre:"Santa Helena", familias:null, personas:3, viviendas:1},
-    {nombre:"Vereda El Higual", familias:5, personas:11, viviendas:5},
+    {nombre:"Vereda El Higual", familias:7, personas:18, viviendas:7, verificar:true},
     {nombre:"Vereda El Hoyo", familias:2, personas:6, viviendas:2},
     {nombre:"Vereda El Placer", familias:1, personas:1, viviendas:1},
-    {nombre:"Vereda La Balsora", familias:1, personas:4, viviendas:1},
-    {nombre:"Vereda La Cristalina", familias:1, personas:1, viviendas:1},
+    {nombre:"Vereda La Balsora", familias:8, personas:31, viviendas:8},
+    {nombre:"Vereda La Cristalina", familias:3, personas:4, viviendas:3},
   ],
-
-};
-
-let CURRENT = null;
-let sortState = { key: 'nombre', dir: 'asc' };
-
-/* ============ ALMACENAMIENTO ============ */
-/* Combina los datos guardados con los valores de referencia (DEFAULT_DATA), campo por
-   campo en cada objeto anidado. Esto es necesario porque el panel puede tener datos
-   guardados de una versión anterior del esquema (por ejemplo, de antes de agregar
-   "viviendasDetalle") — sin este merge, un campo nuevo que no existe en lo guardado
-   se mostraría vacío o en ceros en vez de completarse con el valor de referencia. */
-function mergeWithDefaults(parsed){
-  const merged = { ...DEFAULT_DATA, ...parsed };
-  ['personas','urbano','rural','viviendas','viviendasDetalle','otros'].forEach(k => {
-    if(DEFAULT_DATA[k] && typeof DEFAULT_DATA[k] === 'object' && !Array.isArray(DEFAULT_DATA[k])){
-      merged[k] = { ...DEFAULT_DATA[k], ...(parsed[k] || {}) };
+...(parsed[k] || {}) };
     }
   });
   return merged;
@@ -775,8 +770,8 @@ function render(data){
   // Reparto exhaustivo: cada grupo (arriba) SIEMPRE suma exactamente el total ya
   // publicado en "Vivienda afectada" (data.viviendas.destruidas / .averiadas), porque
   // el residuo "Sin desagregar" se calcula como total-conocido, no se guarda aparte.
-  const totalA = data.viviendas.destruidas;               // Destruidas + No habitables (352)
-  const totalB = data.viviendas.averiadas;                 // Habitables + Averiadas (397)
+  const totalA = data.viviendas.destruidas;               // Destruidas + No habitables (452)
+  const totalB = data.viviendas.averiadas;                 // Habitables + Averiadas (517)
   const ndA = Math.max(0, totalA - vd.destruidas - vd.noHabitables);
   const ndB = Math.max(0, totalB - vd.habitables - vd.averiadas);
   document.getElementById('viv-detalle-sub').textContent =
@@ -809,8 +804,11 @@ function render(data){
 
   /* ===== 5. ECONOMÍA ===== */
   const o = data.otros;
+  const localesNd = Math.max(0, o.localesTotal - o.localesDestruidos - o.localesHabitables);
+  const localesSub = `${fmt(o.localesDestruidos)} destruidos / no habitables · ${fmt(o.localesHabitables)} habitables y averiados` +
+    (localesNd > 0 ? ` · ${fmt(localesNd)} sin desagregar aún` : '');
   document.getElementById('damage-grid').innerHTML = [
-    statRow('shop', fmt(o.localesTotal), 'Locales comerciales afectados', '#B7791F', `${fmt(o.localesDestruidos)} destruidos / no habitables · ${fmt(o.localesHabitables)} habitables y averiados`),
+    statRow('shop', fmt(o.localesTotal), 'Locales comerciales afectados', '#B7791F', localesSub),
     statRow('person', fmt(o.comerciantes), 'Comerciantes afectados', '#14467B'),
     statRow('car', fmt(o.vehiculos), 'Vehículo(s) afectado(s)', '#5B6572', o.vehiculosDetalle),
   ].join('');
@@ -819,9 +817,7 @@ function render(data){
   document.getElementById('rural-note').textContent =
     `Levantamiento acumulado en ${data.rural.veredasVerificadas} veredas y corregimientos verificados en terreno. La Coordinación de Gestión del Riesgo continúa el recorrido en las unidades restantes del municipio.`;
   renderVeredaTable();
-
-
-  document.getElementById('source-line').textContent =
+document.getElementById('source-line').textContent =
     'Fuente: Coordinación Municipal de Gestión del Riesgo · Alcaldía de Versalles · Panel actualizado por última vez el ' +
     upd.toLocaleDateString('es-CO', {dateStyle:'long'});
   document.getElementById('traceability-line').textContent = data.fuente || '';
@@ -1135,7 +1131,7 @@ setInterval(poll, 20000);
     const data = await loadData();
     render(data);
   }catch(e){
-    console.error('No se pudo cargar el estado guardado; se muestran los datos de referencia del documento 11 (v5).', e);
+    console.error('No se pudo cargar el estado guardado; se muestran los datos de referencia del documento 11 (v8).', e);
     render(DEFAULT_DATA);
   }
 })();
