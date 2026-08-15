@@ -144,7 +144,20 @@
   table.vtable tr:nth-child(even) td{background:#F7F9FB;}
   table.vtable tfoot td{font-weight:700; background:#EAF0F7; color:var(--navy); border-top:2px solid var(--navy);}
   .empty-row td{text-align:center; color:var(--muted-2); padding:18px; font-style:italic;}
-/* ===== FOOTER ===== */
+
+  /* ===== OBSERVACIONES / PENDIENTES ===== */
+  .obs-box{background:#FFF7E6; border:1px solid #EBD8A6; border-radius:14px; padding:20px 24px;}
+  .obs-item{display:flex; gap:12px; margin-bottom:13px; align-items:flex-start;}
+  .obs-item:last-child{margin-bottom:0;}
+  .obs-item svg{width:19px; height:19px; color:var(--amber); flex-shrink:0; margin-top:1px;}
+  .obs-item p{font-size:13.5px; color:#4A3B14; line-height:1.5;}
+  .pend-box{background:#FBEEEE; border:1px solid #EFC9CA; border-radius:14px; padding:20px 24px;}
+  .pend-item{display:flex; gap:12px; margin-bottom:13px; align-items:flex-start;}
+  .pend-item:last-child{margin-bottom:0;}
+  .pend-item svg{width:19px; height:19px; color:var(--red); flex-shrink:0; margin-top:1px;}
+  .pend-item p{font-size:13.5px; color:#4A1416; line-height:1.5;}
+
+  /* ===== FOOTER ===== */
   .source-line{text-align:center; font-size:11.5px; color:var(--muted-2); padding:6px 0 4px;}
   .traceability-line{text-align:center; font-size:11px; color:var(--muted-2); padding:0 0 16px; font-style:italic;}
   .footer{background:var(--navy); color:#fff; padding:22px 5vw;}
@@ -306,7 +319,16 @@
       <div class="hint" style="margin-top:10px;">«—» en familias significa que ese dato aún no se ha verificado en esa localidad — <b>no significa cero</b>. Las localidades marcadas <span class="flag">VERIFICAR</span> tienen un nombre parecido al de otra localidad ya registrada; se muestran por separado hasta confirmar en terreno si son el mismo lugar o dos lugares distintos, para evitar tanto un doble conteo como una omisión.</div>
     </div>
   </div>
-<div class="source-line" id="source-line"></div>
+
+  <div class="section" style="display:none;" aria-hidden="true">
+    <div class="obs-box" id="obs-box"></div>
+  </div>
+
+  <div class="section" style="display:none;" aria-hidden="true">
+    <div class="pend-box" id="pend-box"></div>
+  </div>
+
+  <div class="source-line" id="source-line"></div>
   <div class="traceability-line" id="traceability-line"></div>
 </div>
 
@@ -452,7 +474,24 @@
           <div class="hint">Deja el campo de familias vacío si aún no se conoce (se mostrará como «—»). El quinto campo "verificar" es opcional: escribe "si" para marcar la localidad con la etiqueta VERIFICAR (nombre parecido a otra ya registrada). Ejemplo: El Vergel (vereda/caserío); 1; 1; 1; si</div>
         </div>
       </div>
-<div class="modal-actions">
+
+      <div class="fieldset" style="display:none;" aria-hidden="true">
+        <legend>Observaciones</legend>
+        <div class="field" style="margin-bottom:0;">
+          <label for="f-observaciones">Una observación por línea</label>
+          <textarea id="f-observaciones"></textarea>
+        </div>
+      </div>
+
+      <div class="fieldset" style="display:none;" aria-hidden="true">
+        <legend>Puntos pendientes de verificación</legend>
+        <div class="field" style="margin-bottom:0;">
+          <label for="f-pendientes">Un punto por línea</label>
+          <textarea id="f-pendientes" style="min-height:140px;"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-actions">
         <button type="button" class="btn btn-ghost" id="btn-cancel">Cancelar</button>
         <button type="submit" class="btn btn-navy" id="btn-save">Guardar cambios</button>
       </div>
@@ -659,7 +698,43 @@ const DEFAULT_DATA = {
     {nombre:"Vereda La Balsora", familias:8, personas:31, viviendas:8},
     {nombre:"Vereda La Cristalina", familias:3, personas:4, viviendas:3},
   ],
-...(parsed[k] || {}) };
+
+  observaciones: [
+    "Cifras acumuladas y reconciliadas del municipio, consolidadas en la hoja \"Trazabilidad EDAN\" del documento 11 (v8) a partir de los Informes Técnicos No. 1 a 5 y los reportes de campo del 12, 13 y 14 de agosto de 2026.",
+    "Todas las cifras de este panel usan un solo sistema de categorización (afectados/EDAN): las verificaciones puerta a puerta y los censos por familias se incorporan como actualización o incremento de la misma cifra, nunca como un conteo aparte que deba sumarse o conciliarse por separado.",
+    "El Único Reporte de campo del 14 de agosto (6:00 p.m.) amplió la cobertura territorial a 40 localidades rurales verificadas (antes 33) y, por primera vez, trajo el estado puntual de la vivienda (destruida, no habitable, habitable o averiada) en casi la totalidad de los casos reportados, tanto en el casco urbano como en la zona rural.",
+    "La información continúa en verificación y actualización permanente en campo por parte de la Coordinación de Gestión del Riesgo.",
+    "Los equipos municipales mantienen coordinación activa con la Gobernación del Valle del Cauca, la UNGRD y las demás entidades del Sistema Nacional de Gestión del Riesgo de Desastres.",
+    "Se solicita a la comunidad seguir únicamente los canales oficiales de información y atender las recomendaciones de las autoridades y organismos de socorro."
+  ],
+
+  pendientes: [
+    "La cifra de la UNGRD departamental (468 viviendas) está 501 viviendas por debajo del total municipal (969, tras el Único Reporte del 14 de agosto) — pendiente confirmar con la UNGRD si ya incorpora el levantamiento más reciente y remitirles el Excel de trazabilidad actualizado.",
+    "Verificar si \"El Jigual\" (Único Reporte del 14 de agosto) es la misma vereda que \"Vereda El Higual\" ya registrada — se asumió que sí por similitud ortográfica y se sumó como incremento a la misma localidad.",
+    "Verificar si \"El Balsal\" y \"El Vergel\" (reporte del 13 de agosto) son localidades distintas de \"Corregimiento del Balsal\" y \"Corregimiento del Vergel\", o el mismo lugar con un conteo parcial.",
+    "Verificar si \"Guaimalito\" y \"Guamalito\" (nombrada así en el reporte del 13 de agosto) son la misma vereda con una variante ortográfica del nombre.",
+    "Verificar en terreno la cifra de vivienda de Calamar en el reporte del 13 de agosto: reporta 4 viviendas para 1 sola familia.",
+    "La vereda El Tulcán solo reportó, al 14 de agosto, la afectación de su escuela — aún no se conoce el número de familias, personas ni viviendas afectadas en esa localidad.",
+    "Completar la identificación por nombre de las 2 sedes educativas y el templo aún no identificados dentro de las cifras de 5 y 2 reportadas, respectivamente.",
+    "Completar la desagregación por estado de los 13 locales comerciales (8 urbanos + 5 rurales) reportados el 14 de agosto sin distinguir si están destruidos/no habitables o habitables/averiados.",
+    "Continuar el levantamiento EDAN en las localidades del municipio que aún no han sido verificadas en terreno."
+  ]
+};
+
+let CURRENT = null;
+let sortState = { key: 'nombre', dir: 'asc' };
+
+/* ============ ALMACENAMIENTO ============ */
+/* Combina los datos guardados con los valores de referencia (DEFAULT_DATA), campo por
+   campo en cada objeto anidado. Esto es necesario porque el panel puede tener datos
+   guardados de una versión anterior del esquema (por ejemplo, de antes de agregar
+   "viviendasDetalle") — sin este merge, un campo nuevo que no existe en lo guardado
+   se mostraría vacío o en ceros en vez de completarse con el valor de referencia. */
+function mergeWithDefaults(parsed){
+  const merged = { ...DEFAULT_DATA, ...parsed };
+  ['personas','urbano','rural','viviendas','viviendasDetalle','otros'].forEach(k => {
+    if(DEFAULT_DATA[k] && typeof DEFAULT_DATA[k] === 'object' && !Array.isArray(DEFAULT_DATA[k])){
+      merged[k] = { ...DEFAULT_DATA[k], ...(parsed[k] || {}) };
     }
   });
   return merged;
@@ -817,7 +892,16 @@ function render(data){
   document.getElementById('rural-note').textContent =
     `Levantamiento acumulado en ${data.rural.veredasVerificadas} veredas y corregimientos verificados en terreno. La Coordinación de Gestión del Riesgo continúa el recorrido en las unidades restantes del municipio.`;
   renderVeredaTable();
-document.getElementById('source-line').textContent =
+
+  /* ===== OBSERVACIONES / PENDIENTES ===== */
+  const obsIcons = ['clip','check','people','warn'];
+  document.getElementById('obs-box').innerHTML = data.observaciones.map((t,i) => `
+    <div class="obs-item">${ICON[obsIcons[i % obsIcons.length]]}<p>${escapeHtml(t)}</p></div>`).join('');
+  document.getElementById('pend-box').innerHTML = (data.pendientes||[]).map((t) => `
+    <div class="pend-item">${ICON.flag}<p>${escapeHtml(t)}</p></div>`).join('') ||
+    `<div class="pend-item">${ICON.check}<p>Sin puntos pendientes registrados.</p></div>`;
+
+  document.getElementById('source-line').textContent =
     'Fuente: Coordinación Municipal de Gestión del Riesgo · Alcaldía de Versalles · Panel actualizado por última vez el ' +
     upd.toLocaleDateString('es-CO', {dateStyle:'long'});
   document.getElementById('traceability-line').textContent = data.fuente || '';
@@ -932,6 +1016,8 @@ function openEditModal(){
 
   document.getElementById('f-veredas').value = d.veredas.map(v =>
     `${v.nombre}; ${v.familias!=null?v.familias:''}; ${v.personas}; ${v.viviendas}${v.verificar?'; si':''}`).join('\n');
+  document.getElementById('f-observaciones').value = d.observaciones.join('\n');
+  document.getElementById('f-pendientes').value = (d.pendientes||[]).join('\n');
 
   document.getElementById('overlay').classList.add('open');
 }
@@ -1011,6 +1097,8 @@ async function handleSave(e){
     },
     servicios: svcRows,
     veredas: parseVeredas(document.getElementById('f-veredas').value),
+    observaciones: document.getElementById('f-observaciones').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    pendientes: document.getElementById('f-pendientes').value.split('\n').map(s=>s.trim()).filter(Boolean),
   };
 
   document.getElementById('btn-save').textContent = 'Guardando…';
