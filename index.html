@@ -396,7 +396,7 @@
         </div>
         <div class="field" style="margin-bottom:0;">
           <label for="f-fuente">Fuente / trazabilidad</label>
-          <input type="text" id="f-fuente" placeholder='Ej: Hoja "Trazabilidad EDAN", documento 11 (v8)'>
+          <input type="text" id="f-fuente" placeholder='Ej: Hoja "Trazabilidad EDAN", documento 11 (v9)'>
         </div>
       </div>
 
@@ -529,7 +529,7 @@ const ICON = {
 };
 
 const TONE_COLOR = { ok:'#1E7145', warn:'#B7791F', bad:'#C1272D' };
-const STORAGE_KEY = 'versalles-sismo-dashboard-v3'; // v3: corte 14 ago 2026 — clave nueva para no cargar datos guardados de cortes anteriores (13 ago y previos, esquema v2)
+const STORAGE_KEY = 'versalles-sismo-dashboard-v4'; // v4: corte 15 ago 2026 // v3: corte 14 ago 2026 — clave nueva para no cargar datos guardados de cortes anteriores (13 ago y previos, esquema v2)
 const AUTH_KEY = 'versalles-sismo-dashboard-auth';
 const MAX_ATTEMPTS = 5;
 const LOCK_MINUTES = 15;
@@ -596,19 +596,19 @@ async function saveAuth(auth){
 }
 
 /* ============ DATOS ============
-   Consolidados desde la hoja "Trazabilidad EDAN" del documento 11 (v8), que ya reconcilia
-   en UN SOLO sistema todos los informes (1 a 5) y reportes de campo (12, 13 y 14 de agosto).
+   Consolidados desde la hoja "Trazabilidad EDAN" del documento 11 (v9), que ya reconcilia
+   en UN SOLO sistema todos los informes (1 a 5) y reportes de campo (12, 13, 14 y 15 de agosto).
    No existen aquí conteos paralelos "damnificados" vs. "afectados": cada categoría tiene
    una única cifra municipal, con su desagregación urbano/rural. */
 const DEFAULT_DATA = {
-  cutoffLabel: "14 de agosto de 2026 · 6:00 p.m.",
+  cutoffLabel: "15 de agosto de 2026 · 6:00 p. m.",
   updatedAt: new Date().toISOString(),
   updatedBy: "Coordinación de Gestión del Riesgo",
-  fuente: 'Hoja "Trazabilidad EDAN", documento 11 (v8) — Informes Técnicos No. 1 a 5 + reportes de campo del 12, 13 y 14 de agosto de 2026',
+  fuente: 'Único reporte de campo del 15 de agosto de 2026, 6:00 p.m. + Excel de trazabilidad EDAN (documento 11, v9)',
 
-  personas: { afectadas: 2267, fallecidos: 0, lesionados: 18, familias: 1050 },
-  urbano: { personas: 1454, familias: 771, viviendas: 635 },
-  rural: { personas: 813, familias: 279, viviendas: 334, veredasVerificadas: 40 },
+  personas: { afectadas: 2656, fallecidos: 0, lesionados: 18, familias: 1191 },
+  urbano: { personas: 1600, familias: 846, viviendas: 710 },
+  rural: { personas: 1056, familias: 345, viviendas: 400, veredasVerificadas: 42 },
 
   instituciones: [
     { nombre:"Sede de la Alcaldía Municipal", tipo:"Administración municipal", estado:"INHABITABLE", tone:"bad" },
@@ -631,19 +631,19 @@ const DEFAULT_DATA = {
     { label:"Acceso vial principal (Sabanazo y Q. Grande)", status:"PASO RESTRINGIDO POR DESLIZAMIENTOS", tone:"warn" },
   ],
 
-  viviendas: { destruidas: 452, averiadas: 517 },
+  viviendas: { destruidas: 499, averiadas: 611 },
   /* Desagregación por estado individual (destruida/no habitable/habitable/averiada), solo para las
      viviendas cuyo informe o reporte de origen ya distinguía ese detalle. Ver documento 11 (v6),
      hoja "Detalle Vivienda por Estado", para el desglose completo por fuente. */
   viviendasDetalle: {
     // Los totales de cada grupo NO se guardan aquí: se toman siempre de
-    // data.viviendas.destruidas (452) y data.viviendas.averiadas (517), y el
+    // data.viviendas.destruidas (499) y data.viviendas.averiadas (611), y el
     // residuo "Sin desagregar" se calcula en render() como total-conocido.
-    // Con el Único Reporte del 14 de agosto, el municipio pasó a tener el estado
+    // Con el Único Reporte del 15 de agosto, el municipio mantiene el estado
     // puntual de vivienda (destruida/no habitable/habitable/averiada) en casi la
     // totalidad de los casos — el residuo "Sin desagregar" no creció en términos
     // absolutos (96 y 371) porque el nuevo reporte no aportó casos sin desagregar.
-    destruidas: 124, noHabitables: 232, habitables: 67, averiadas: 79,
+    destruidas: 131, noHabitables: 272, habitables: 119, averiadas: 121,
   },
 
   otros: {
@@ -657,12 +657,12 @@ const DEFAULT_DATA = {
   },
 
   veredas: [
-    {nombre:"Batambal", familias:3, personas:8, viviendas:3},
+    {nombre:"Batambal", familias:5, personas:11, viviendas:5},
     {nombre:"Bosquetarzo", familias:10, personas:31, viviendas:12},
     {nombre:"Buena Vista", familias:1, personas:2, viviendas:1},
     {nombre:"Calamar", familias:3, personas:13, viviendas:6},
-    {nombre:"Campoalegre", familias:13, personas:23, viviendas:13},
-    {nombre:"Coconuco", familias:4, personas:27, viviendas:9},
+    {nombre:"Campoalegre", familias:24, personas:64, viviendas:24},
+    {nombre:"Coconuco", familias:34, personas:187, viviendas:39},
     {nombre:"Corregimiento del Balsal", familias:21, personas:48, viviendas:21},
     {nombre:"Corregimiento del Vergel", familias:13, personas:18, viviendas:13},
     {nombre:"Costa Rica", familias:12, personas:34, viviendas:12},
@@ -670,37 +670,39 @@ const DEFAULT_DATA = {
     {nombre:"El Bosque", familias:1, personas:2, viviendas:1},
     {nombre:"El Cedral", familias:null, personas:1, viviendas:1},
     {nombre:"El Cedro", familias:null, personas:3, viviendas:1},
-    {nombre:"El Descanso", familias:1, personas:5, viviendas:1},
-    {nombre:"El Diamante", familias:5, personas:12, viviendas:6},
-    {nombre:"El Jordán", familias:23, personas:78, viviendas:23},
+    {nombre:"El Descanso", familias:2, personas:7, viviendas:2},
+    {nombre:"El Diamante", familias:6, personas:15, viviendas:7},
+    {nombre:"El Jordán", familias:24, personas:79, viviendas:24},
     {nombre:"El Lular", familias:1, personas:5, viviendas:2},
     {nombre:"El Silencio", familias:13, personas:23, viviendas:13},
-    {nombre:"El Tambo", familias:11, personas:30, viviendas:11},
-    {nombre:"El Tulcán", familias:0, personas:0, viviendas:0},
-    {nombre:"El Vergel (vereda/caserío)", familias:3, personas:6, viviendas:3, verificar:true},
+    {nombre:"El Tambo", familias:13, personas:32, viviendas:13},
+    {nombre:"El Tulcán", familias:1, personas:1, viviendas:1},
+    {nombre:"El Vergel (vereda/caserío)", familias:6, personas:12, viviendas:6, verificar:true},
     {nombre:"Guaimalito", familias:1, personas:3, viviendas:2, verificar:true},
     {nombre:"Guayabal", familias:2, personas:4, viviendas:3},
     {nombre:"La Bodega", familias:null, personas:4, viviendas:1},
     {nombre:"La Cascada", familias:null, personas:2, viviendas:1},
     {nombre:"La Florida", familias:45, personas:170, viviendas:77},
     {nombre:"La Guaira", familias:null, personas:3, viviendas:1},
-    {nombre:"La Rayada", familias:4, personas:6, viviendas:4},
+    {nombre:"La Rayada", familias:6, personas:14, viviendas:6},
     {nombre:"La Sonora", familias:2, personas:10, viviendas:3},
     {nombre:"Murrapal", familias:28, personas:84, viviendas:28},
     {nombre:"Pinares", familias:3, personas:5, viviendas:3},
-    {nombre:"Pueblo Hondo", familias:9, personas:20, viviendas:9},
+    {nombre:"Pueblo Hondo", familias:11, personas:22, viviendas:11},
     {nombre:"Puente Tierra", familias:15, personas:44, viviendas:17},
-    {nombre:"Puerto Nuevo", familias:1, personas:3, viviendas:1},
+    {nombre:"Puerto Nuevo", familias:7, personas:10, viviendas:7},
     {nombre:"Santa Helena", familias:null, personas:3, viviendas:1},
-    {nombre:"Vereda El Higual", familias:7, personas:18, viviendas:7, verificar:true},
-    {nombre:"Vereda El Hoyo", familias:2, personas:6, viviendas:2},
+    {nombre:"Vereda El Higual", familias:8, personas:19, viviendas:8, verificar:true},
+    {nombre:"Vereda El Hoyo", familias:3, personas:9, viviendas:3},
     {nombre:"Vereda El Placer", familias:1, personas:1, viviendas:1},
     {nombre:"Vereda La Balsora", familias:8, personas:31, viviendas:8},
     {nombre:"Vereda La Cristalina", familias:3, personas:4, viviendas:3},
+    {nombre:"La Playita", familias:1, personas:2, viviendas:1},
+    {nombre:"La Aurora", familias:1, personas:1, viviendas:1},
   ],
 
   observaciones: [
-    "Cifras acumuladas y reconciliadas del municipio, consolidadas en la hoja \"Trazabilidad EDAN\" del documento 11 (v8) a partir de los Informes Técnicos No. 1 a 5 y los reportes de campo del 12, 13 y 14 de agosto de 2026.",
+    "Cifras acumuladas y reconciliadas del municipio, consolidadas en la hoja \"Trazabilidad EDAN\" del documento 11 (v9) a partir de los Informes Técnicos No. 1 a 5 y los reportes de campo del 12, 13, 14 y 15 de agosto de 2026.",
     "Todas las cifras de este panel usan un solo sistema de categorización (afectados/EDAN): las verificaciones puerta a puerta y los censos por familias se incorporan como actualización o incremento de la misma cifra, nunca como un conteo aparte que deba sumarse o conciliarse por separado.",
     "El Único Reporte de campo del 14 de agosto (6:00 p.m.) amplió la cobertura territorial a 40 localidades rurales verificadas (antes 33) y, por primera vez, trajo el estado puntual de la vivienda (destruida, no habitable, habitable o averiada) en casi la totalidad de los casos reportados, tanto en el casco urbano como en la zona rural.",
     "La información continúa en verificación y actualización permanente en campo por parte de la Coordinación de Gestión del Riesgo.",
@@ -1219,7 +1221,7 @@ setInterval(poll, 20000);
     const data = await loadData();
     render(data);
   }catch(e){
-    console.error('No se pudo cargar el estado guardado; se muestran los datos de referencia del documento 11 (v8).', e);
+    console.error('No se pudo cargar el estado guardado; se muestran los datos de referencia del documento 11 (v9).', e);
     render(DEFAULT_DATA);
   }
 })();
